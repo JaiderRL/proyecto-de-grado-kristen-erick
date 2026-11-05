@@ -1,0 +1,36 @@
+{
+  "name": "byteguard",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Blog editorial de ciberseguridad con escritores, administracion y persistencia SQLite.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "seed:admin": "node scripts/seed-admin.js",
+    "test": "node scripts/smoke-test.js && node scripts/integration-test.js && node scripts/operations-test.js",
+    "test:browser": "node scripts/browser-test.js",
+    "admin:create": "node scripts/manage-account.js",
+    "account:reset": "node scripts/manage-account.js --reset",
+    "backup": "node scripts/backup.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^11.8.1",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "markdown-it": "^14.3.2",
+    "xss": "^1.0.15"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0"
+  }
+}

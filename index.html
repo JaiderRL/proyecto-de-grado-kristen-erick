@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description"
+    content="Entiende la ciberseguridad. Guías prácticas, privacidad y cultura digital, escritas por una comunidad curiosa." />
+  <meta name="theme-color" content="#17211f" />
+  <title>ByteGuard — Ciberseguridad sin ruido</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="alternate" type="application/rss+xml" title="ByteGuard RSS" href="/feed.xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script src="/script.js" defer></script>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Saltar al contenido</a>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="ByteGuard, inicio"><img src="/favicon.svg" width="32" height="32"
+        alt="" /><span>byte<span>guard</span>.</span></a>
+    <nav id="mainNav" class="main-nav" aria-label="Navegación principal">
+      <a href="/#articulos">Artículos</a><a href="/#temas">Explorar temas</a><a href="/#recursos">Recursos</a>
+    </nav>
+    <div class="header-actions">
+      <a class="icon-button search-icon" href="/#articulos" aria-label="Buscar artículos"><svg viewBox="0 0 24 24"
+          aria-hidden="true">
+          <circle cx="10.5" cy="10.5" r="6.5" />
+          <path d="m16 16 4 4" />
+        </svg></a><button class="button small" id="accountButton" data-action="account">
+        Acceso editorial <span>↗</span></button><button class="icon-button menu-button" id="menuButton"
+        aria-expanded="false" aria-controls="mainNav" aria-label="Abrir menú">
+        ☰
+      </button>
+    </div>
+  </header>
+  <div id="setupBanner" class="setup-banner" hidden>
+    <span>Tu espacio está listo. Configura la cuenta de administración para
+      comenzar.</span><button data-action="setup" class="text-link">
+      Configurar ByteGuard →
+    </button>
+  </div>
+  <main id="main">
+    <div id="homeView">
+      <section class="hero wrap" aria-labelledby="heroTitle">
+        <div class="hero-copy">
+          <p class="eyebrow">
+            <span class="status-dot"></span> CONOCIMIENTO ABIERTO · DEFENSA
+            DIGITAL
+          </p>
+          <h1 id="heroTitle">
+            La seguridad digital<br />empieza por<br /><em>entenderla.</em>
+          </h1>
+          <p class="hero-description">
+            Señales claras entre el ruido tecnológico. Ideas, guías y
+            herramientas para tomar el control de tu vida digital.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#articulos">Encuentra tu próxima lectura <span>↗</span></a><button class="text-link"
+              data-action="write">
+              Comparte lo que sabes →
+            </button>
+          </div>
+          <div class="trust-row">
+            <span>APRENDE.</span><span>CUESTIONA.</span><span>PROTÉGETE.</span>
+          </div>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <div class="art-grid"></div>
+          <div class="orbit orbit-one"></div>
+          <div class="orbit orbit-two"></div>
+          <div class="orbit orbit-three"></div>
+          <div class="orbit-point point-one"></div>
+          <div class="orbit-point point-two"></div>
+          <div class="orbit-point point-three"></div>
+          <div class="shield-core">
+            <svg viewBox="0 0 120 138">
+              <path d="M60 5 108 23v38c0 31-20 57-48 70C32 118 12 92 12 61V23L60 5Z" />
+              <path d="m38 68 14 14 31-34" />
+            </svg>
+          </div>
+          <div class="art-label label-top">
+            <span class="status-dot"></span> KNOWLEDGE IS YOUR FIREWALL
+          </div>
+          <div class="art-label label-bottom">
+            [ CONEXIÓN CON EL CONOCIMIENTO ]<br /><b>MENOS RUIDO. MÁS CRITERIO.</b>
+          </div>
+          <span class="art-coordinate">BG / 01</span>
+        </div>
+      </section>
+      <div class="signal-strip">
+        <div class="wrap">
+          <span class="eyebrow">TU PRIMERA LÍNEA DE DEFENSA</span>
+          <p>La curiosidad, bien informada.</p>
+          <a href="#temas" class="text-link">Empieza por un tema ↓</a>
+        </div>
+      </div>
+      <section class="wrap section" aria-labelledby="featuredTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">SELECCIÓN EDITORIAL</p>
+            <h2 id="featuredTitle">
+              Ideas que vale la pena<br />tener en el radar.
+            </h2>
+          </div>
+          <a href="#articulos" class="text-link">Ver todas las lecturas ↗</a>
+        </div>
+        <div id="featuredPosts" class="featured-grid" aria-live="polite">
+          <p class="empty-state">Cargando lecturas…</p>
+        </div>
+      </section>
+      <section class="topics-section" id="temas" aria-labelledby="topicsTitle">
+        <div class="wrap">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">EXPLORA CON INTENCIÓN</p>
+              <h2 id="topicsTitle">Tu próxima pregunta<br />empieza aquí.</h2>
+            </div>
+            <p class="section-note">
+              Desde los primeros pasos hasta<br />los detalles que hacen la
+              diferencia.
+            </p>
+          </div>
+          <div class="topics-grid">
+            <button class="topic-card" data-category="Privacidad">
+              <span class="topic-number">01 / TUS DATOS</span><span
+                class="topic-symbol">◎</span><strong>Privacidad</strong><span>Recupera el control de tu
+                información.</span><b>↗</b>
+            </button>
+            <button class="topic-card" data-category="Seguridad">
+              <span class="topic-number">02 / TU DEFENSA</span><span
+                class="topic-symbol">◇</span><strong>Seguridad</strong><span>Hábitos que protegen lo
+                importante.</span><b>↗</b>
+            </button>
+            <button class="topic-card" data-category="Amenazas">
+              <span class="topic-number">03 / TU RADAR</span><span
+                class="topic-symbol">⌁</span><strong>Amenazas</strong><span>Reconoce las señales antes de
+                actuar.</span><b>↗</b>
+            </button>
+            <button class="topic-card" data-category="Herramientas">
+              <span class="topic-number">04 / TU KIT</span><span
+                class="topic-symbol">⌘</span><strong>Herramientas</strong><span>Entiende lo que usas cada
+                día.</span><b>↗</b>
+            </button>
+          </div>
+        </div>
+      </section>
+      <section class="wrap section" id="articulos" aria-labelledby="catalogTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LA BIBLIOTECA BYTEGUARD</p>
+            <h2 id="catalogTitle">Sigue tu curiosidad.</h2>
+          </div>
+          <button class="text-link" data-action="saved">
+            Mis lecturas guardadas ↗
+          </button>
+        </div>
+        <form id="searchForm" class="catalog-tools" role="search">
+          <div class="search-field">
+            <label class="sr-only" for="searchInput">Buscar artículos</label><input id="searchInput" type="search"
+              maxlength="80" placeholder="Busca una idea, un tema, una pregunta…" /><button class="button"
+              type="submit">Buscar →</button>
+          </div>
+          <div>
+            <label class="sr-only" for="categoryFilter">Filtrar por categoría</label><select id="categoryFilter">
+              <option value="">Todos los temas</option>
+            </select>
+          </div>
+          <div>
+            <label class="sr-only" for="sortFilter">Ordenar artículos</label><select id="sortFilter">
+              <option value="newest">Más recientes</option>
+              <option value="oldest">Más antiguos</option>
+            </select>
+          </div>
+        </form>
+        <div class="results-heading">
+          <p id="resultCount" aria-live="polite"></p>
+          <button class="text-link" id="clearFilters" data-action="clear-filters" hidden>
+            Limpiar filtros ×
+          </button>
+        </div>
+        <div class="article-grid" id="publicPosts" aria-live="polite"></div>
+        <nav class="pagination" id="catalogPagination" aria-label="Páginas de artículos"></nav>
+      </section>
+      <section class="resources-section wrap" id="recursos" aria-labelledby="resourcesTitle">
+        <div>
+          <p class="eyebrow">DEL CONOCIMIENTO A LA PRÁCTICA</p>
+          <h2 id="resourcesTitle">
+            Pequeñas acciones.<br /><em>Mejores hábitos.</em>
+          </h2>
+          <p>
+            Empieza con nuestra lista de seguridad personal y vuelve a ella
+            cuando lo necesites.
+          </p>
+          <button class="button light" data-action="checklist">
+            Abrir lista de seguridad ↗
+          </button>
+        </div>
+        <div class="resource-links">
+          <a href="/feed.xml"><span>01 / MANTENTE AL DÍA</span><strong>Tu lector RSS, tus reglas. ↗</strong>
+            <p>Recibe los artículos publicados en tu lector favorito.</p>
+          </a><button data-action="guidelines">
+            <span>02 / COMPARTE LO QUE SABES</span><strong>Una comunidad con criterio. ↗</strong>
+            <p>Conoce nuestra guía para escribir y publicar.</p>
+          </button>
+        </div>
+      </section>
+      <section class="wrap contribution">
+        <div>
+          <p class="eyebrow">LA MEJOR DEFENSA SE COMPARTE</p>
+          <h2>Tu perspectiva también cuenta.</h2>
+          <p>
+            Escribe una guía, explica un concepto o comparte una lección
+            aprendida.
+          </p>
+        </div>
+        <button class="button" data-action="write">Quiero escribir ↗</button>
+      </section>
+    </div>
+    <section id="articleView" class="wrap article-view" hidden aria-labelledby="articleTitle">
+      <a class="text-link back-link" href="/#articulos">← Volver a las lecturas</a>
+      <div id="articleLoading" class="empty-state">Cargando artículo…</div>
+      <article id="articleDetail" hidden>
+        <header class="article-header">
+          <p class="eyebrow" id="articleMeta"></p>
+          <h1 id="articleTitle"></h1>
+          <p class="article-excerpt" id="articleExcerpt"></p>
+          <div class="article-byline">
+            <span class="avatar" id="articleAvatar"></span>
+            <div>
+              <strong id="articleAuthor"></strong>
+              <p id="articleDate"></p>
+            </div>
+            <button class="button secondary small" id="bookmarkButton" data-action="bookmark">
+              Guardar lectura</button><button class="icon-button" data-action="share"
+              aria-label="Copiar enlace del artículo">
+              ↗
+            </button>
+          </div>
+        </header>
+        <div class="reading-layout">
+          <aside class="reading-aside">
+            <span class="eyebrow">EN ESTA LECTURA</span>
+            <nav id="articleToc" aria-label="Índice del artículo"></nav>
+            <p>Lee con curiosidad.<br />Comparte con criterio.</p>
+          </aside>
+          <div>
+            <div class="prose" id="articleContent"></div>
+            <section class="comments-section" aria-labelledby="commentsTitle">
+              <h2 id="commentsTitle">La conversación continúa.</h2>
+              <p>
+                Haz preguntas, aporta contexto y trata a los demás con
+                respeto.
+              </p>
+              <form id="commentForm">
+                <label for="commentContent">Tu comentario</label><textarea id="commentContent" minlength="3"
+                  maxlength="1500" rows="4" placeholder="¿Qué añadirías a esta lectura?" required></textarea>
+                <p class="field-note">
+                  Los comentarios pasan por moderación antes de publicarse.
+                </p>
+                <button class="button small" type="submit">
+                  Enviar comentario →
+                </button>
+                <p class="form-message" id="commentMessage" role="status"></p>
+              </form>
+              <div id="commentsList"></div>
+              <nav id="commentsPagination" class="pagination" aria-label="Páginas de comentarios"></nav>
+            </section>
+          </div>
+        </div>
+        <section class="related-section">
+          <p class="eyebrow">SIGUE EXPLORANDO</p>
+          <h2>Una idea lleva a otra.</h2>
+          <div id="relatedPosts" class="article-grid"></div>
+        </section>
+      </article>
+    </section>
+    <section id="dashboardView" class="dashboard wrap" hidden aria-labelledby="dashboardTitle">
+      <aside class="dashboard-sidebar">
+        <p class="eyebrow">ESPACIO EDITORIAL</p>
+        <div class="sidebar-profile">
+          <span class="avatar" id="userAvatar"></span>
+          <div>
+            <strong id="userName"></strong><small id="userRole"></small>
+          </div>
+        </div>
+        <nav id="dashboardNav" aria-label="Panel editorial"></nav>
+        <div class="sidebar-footer">
+          <button class="text-link" data-action="profile">
+            Mi perfil y contraseña ↗</button><button class="text-link" data-action="logout">
+            Cerrar sesión ↗</button><a href="/" class="text-link">← Volver al blog</a>
+        </div>
+      </aside>
+      <div class="dashboard-main">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">ESCRIBE. REVISA. COMPARTE.</p>
+            <h1 id="dashboardTitle">Tu mesa de trabajo.</h1>
+            <p id="dashboardIntro"></p>
+          </div>
+          <button class="button" data-action="new-post">
+            + Nuevo artículo
+          </button>
+        </div>
+        <div id="dashboardStats" class="stat-grid"></div>
+        <div class="dashboard-toolbar">
+          <h2 id="dashboardListTitle">Mis artículos</h2>
+          <label id="dashboardFilterLabel">Estado
+            <select id="dashboardFilter">
+              <option value="all">Todos</option>
+              <option value="draft">Borradores</option>
+              <option value="review">En revisión</option>
+              <option value="published">Publicados</option>
+            </select></label>
+        </div>
+        <div id="dashboardContent" aria-live="polite"></div>
+        <nav id="dashboardPagination" class="pagination" aria-label="Páginas del panel"></nav>
+      </div>
+    </section>
+  </main>
+  <footer class="footer wrap">
+    <div>
+      <a class="brand" href="/"><img src="/favicon.svg" width="30" height="30"
+          alt="" /><span>byte<span>guard</span>.</span></a>
+      <p>Un blog para personas curiosas<br />en un mundo digital complejo.</p>
+    </div>
+    <div class="footer-links">
+      <button data-action="about">Sobre ByteGuard</button><button data-action="guidelines">Guía
+        editorial</button><button data-action="privacy">Privacidad</button><a href="/feed.xml">RSS ↗</a>
+    </div>
+    <span class="copyright">© <span id="year"></span> BYTEGUARD<br />EL CONOCIMIENTO ES TU
+      DEFENSA.</span>
+  </footer>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <noscript>
+    <p class="empty-state">
+      Activa JavaScript para explorar artículos y acceder al espacio
+      editorial. También puedes seguir las publicaciones desde
+      <a href="/feed.xml">nuestro RSS</a>.
+    </p>
+  </noscript>
+
+  <dialog id="authDialog" class="modal auth-modal" aria-labelledby="authTitle">
+    <button class="close-button" data-close aria-label="Cerrar acceso">
+      ×</button><img src="/favicon.svg" width="40" height="40" alt="" />
+    <p class="eyebrow">EL CONOCIMIENTO SE COMPARTE</p>
+    <h2 id="authTitle">Bienvenido de nuevo.</h2>
+    <p id="authIntro">
+      Entra a tu espacio para escribir, guardar lecturas y participar.
+    </p>
+    <form id="authForm">
+      <div id="authNameField" hidden>
+        <label for="authName">Nombre visible</label><input id="authName" autocomplete="name" minlength="2"
+          maxlength="80" />
+      </div>
+      <label for="authEmail">Correo electrónico</label><input id="authEmail" type="email" autocomplete="email"
+        maxlength="254" required /><label for="authPassword">Contraseña</label>
+      <div class="password-field">
+        <input id="authPassword" type="password" autocomplete="current-password" minlength="8" maxlength="72"
+          required /><button type="button" data-action="show-password" aria-label="Mostrar contraseña">
+          Ver
+        </button>
+      </div>
+      <p class="field-note" id="authNote">
+        Tu cuenta determina si accedes como escritor o administrador.
+      </p>
+      <p class="form-message" id="authMessage" role="status"></p>
+      <button class="button full" id="authSubmit" type="submit">
+        Iniciar sesión →
+      </button>
+    </form>
+    <button class="text-link auth-switch" id="authSwitch" data-action="auth-switch">
+      Crear una cuenta de escritor
+    </button>
+  </dialog>
+  <dialog id="editorDialog" class="modal editor-modal" aria-labelledby="editorTitle">
+    <div class="editor-top">
+      <div>
+        <p class="eyebrow">TU PRÓXIMA GRAN LECTURA</p>
+        <h2 id="editorTitle">Una idea. Muchas posibilidades.</h2>
+      </div>
+      <button class="close-button" data-close aria-label="Cerrar editor">
+        ×
+      </button>
+    </div>
+    <form id="editorForm">
+      <div class="editor-layout">
+        <div class="editor-main">
+          <label for="postTitle">Título del artículo</label><input class="title-input" id="postTitle" minlength="3"
+            maxlength="160" placeholder="Un título claro despierta la curiosidad" required /><label
+            for="postExcerpt">Resumen</label><textarea id="postExcerpt" minlength="10" maxlength="500" rows="3"
+            placeholder="Cuéntanos qué aprenderá la persona que te lea…" required></textarea>
+          <div class="editor-tabs" role="group" aria-label="Modo del editor">
+            <button type="button" class="active" id="writeTab" data-action="editor-write">
+              Escribir</button><button type="button" id="previewTab" data-action="editor-preview">
+              Vista previa</button><span id="wordCount">0 palabras</span>
+          </div>
+          <div id="editorInput">
+            <div class="format-toolbar" role="group" aria-label="Formato Markdown">
+              <button type="button" data-format="heading" aria-label="Insertar subtítulo">
+                H2</button><button type="button" data-format="bold" aria-label="Insertar negrita">
+                <b>B</b></button><button type="button" data-format="italic" aria-label="Insertar cursiva">
+                <i>I</i></button><button type="button" data-format="list" aria-label="Insertar lista">
+                ≡ Lista</button><button type="button" data-format="link" aria-label="Insertar enlace">
+                ↗ Enlace</button><button type="button" data-format="code" aria-label="Insertar bloque de código">
+                &lt;/&gt;</button><button type="button" data-format="quote" aria-label="Insertar cita">
+                “ Cita
+              </button>
+            </div>
+            <label class="sr-only" for="postContent">Contenido del artículo</label><textarea id="postContent"
+              minlength="20" maxlength="50000" rows="17"
+              placeholder="Empieza por una pregunta que una persona real se haría.&#10;&#10;## Un subtítulo para organizar tus ideas&#10;&#10;Escribe con claridad y añade fuentes cuando corresponda."
+              required></textarea>
+          </div>
+          <div id="editorPreview" class="prose editor-preview" hidden></div>
+        </div>
+        <aside class="editor-settings">
+          <p class="eyebrow">DETALLES DE PUBLICACIÓN</p>
+          <label for="postCategory">Categoría</label><select id="postCategory">
+            <option>Seguridad</option>
+            <option>Privacidad</option>
+            <option>Amenazas</option>
+            <option>Guía</option>
+            <option>Herramientas</option>
+            <option>IA y sociedad</option>
+          </select><label for="postFormat">Formato de escritura</label><select id="postFormat">
+            <option value="markdown">Markdown</option>
+            <option value="html">HTML seguro</option>
+          </select>
+          <p class="field-note">
+            Usa la barra de formato y consulta la vista previa para comprobar
+            cómo se verá tu artículo.
+          </p>
+          <div class="editor-note" id="editorReviewNote" hidden></div>
+          <div class="editor-note">
+            <strong>Antes de enviar</strong>
+            <p>
+              Comprueba las fuentes, explica los términos y elimina cualquier
+              dato privado. Administración revisará el artículo antes de
+              publicarlo.
+            </p>
+          </div>
+          <p id="saveState" class="field-note" role="status">
+            Sin cambios pendientes.
+          </p>
+        </aside>
+      </div>
+      <div class="editor-bottom">
+        <p class="form-message" id="editorMessage" role="status"></p>
+        <div class="button-row">
+          <button class="button secondary" type="submit" name="intent" value="draft">
+            Guardar borrador</button><button class="button" type="submit" name="intent" value="review">
+            Enviar a revisión ↗
+          </button>
+        </div>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="reviewDialog" class="modal review-modal" aria-labelledby="reviewTitle">
+    <button class="close-button" data-close aria-label="Cerrar revisión">
+      ×
+    </button>
+    <p class="eyebrow" id="reviewMeta">REVISIÓN EDITORIAL</p>
+    <h2 id="reviewTitle"></h2>
+    <p id="reviewExcerpt"></p>
+    <div class="prose" id="reviewContent"></div>
+    <details class="history">
+      <summary>Historial editorial</summary>
+      <div id="reviewHistory"></div>
+    </details>
+    <div id="reviewActions">
+      <label for="reviewNote">Observaciones para el autor</label><textarea id="reviewNote" rows="3" maxlength="1000"
+        placeholder="Explica qué necesita mejorar o por qué retiras la publicación…"></textarea>
+      <p class="form-message" id="reviewMessage" role="status"></p>
+      <div class="button-row">
+        <button class="button secondary" data-action="return-post" id="returnPostButton">
+          Devolver a borrador</button><button class="button" data-action="publish-post" id="publishPostButton">
+          Aprobar y publicar ↗
+        </button>
+      </div>
+    </div>
+  </dialog>
+  <dialog id="profileDialog" class="modal" aria-labelledby="profileTitle">
+    <button class="close-button" data-close aria-label="Cerrar perfil">
+      ×
+    </button>
+    <p class="eyebrow">TU CUENTA</p>
+    <h2 id="profileTitle">Ponle tu firma.</h2>
+    <form id="profileForm">
+      <label for="profileName">Nombre visible</label><input id="profileName" minlength="2" maxlength="80"
+        required /><label for="profileBio">Biografía</label><textarea id="profileBio" maxlength="300"
+        rows="3"></textarea>
+      <p class="field-note" id="profileEmail"></p>
+      <button class="button small" type="submit">Guardar perfil →</button>
+      <p class="form-message" id="profileMessage" role="status"></p>
+    </form>
+    <details class="password-settings">
+      <summary>Cambiar contraseña</summary>
+      <form id="passwordForm">
+        <label for="currentPassword">Contraseña actual</label><input id="currentPassword" type="password"
+          autocomplete="current-password" minlength="8" maxlength="72" required /><label for="newPassword">Nueva
+          contraseña</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8"
+          maxlength="72" required /><button class="button small" type="submit">
+          Actualizar contraseña →
+        </button>
+        <p class="form-message" id="passwordMessage" role="status"></p>
+      </form>
+    </details>
+  </dialog>
+  <dialog id="infoDialog" class="modal" aria-labelledby="infoTitle">
+    <button class="close-button" data-close aria-label="Cerrar información">
+      ×
+    </button>
+    <p class="eyebrow">BYTEGUARD / CON CRITERIO</p>
+    <h2 id="infoTitle"></h2>
+    <div class="prose" id="infoContent"></div>
+  </dialog>
+  <dialog id="confirmDialog" class="modal confirm-modal" aria-labelledby="confirmTitle">
+    <h2 id="confirmTitle">¿Confirmas esta acción?</h2>
+    <p id="confirmText"></p>
+    <div class="button-row">
+      <button class="button secondary" data-confirm="no">Cancelar</button><button class="button"
+        data-confirm="yes">Confirmar</button>
+    </div>
+  </dialog>
+</body>
+
+</html>

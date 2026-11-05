@@ -1,0 +1,186 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
+const crypto = require('node:crypto');
+const { chromium, expect } = require('@playwright/test');
+const AxeBuilder = require('@axe-core/playwright').default;
+
+const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'byteguard-browser-'));
+process.env.DATABASE_PATH = path.join(directory, 'test.db');
+process.env.JWT_SECRET = crypto.randomBytes(48).toString('hex');
+process.env.NODE_ENV = 'test';
+process.env.BCRYPT_ROUNDS = '10';
+const { app } = require('../server');
+const { db } = require('../db/database');
+const password = crypto.randomBytes(18).toString('hex');
+let server;
+let browser;
+const errors = [];
+const artifacts = path.join(__dirname, '..', 'artifacts');
+
+async function accessibility(page, name) {
+  const results = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  assert.deepEqual(results.violations.map((item) => ({ id: item.id, targets: item.nodes.map((node) => node.target) })), [], `Accesibilidad: ${name}`);
+}
+
+async function authenticate(page, email, name) {
+  await page.locator('#authName').fill(name);
+  await page.locator('#authEmail').fill(email);
+  await page.locator('#authPassword').fill(password);
+  await page.locator('#authSubmit').click();
+  await expect(page.locator('#dashboardView')).toBeVisible();
+}
+
+async function run() {
+  try {
+    fs.mkdirSync(artifacts, { recursive: true });
+    server = await new Promise((resolve) => { const instance = app.listen(0, '127.0.0.1', () => resolve(instance)); });
+    const base = `http://127.0.0.1:${server.address().port}`;
+    browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'chrome', headless: true });
+    const adminContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const writerContext = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
+    const admin = await adminContext.newPage();
+    const writer = await writerContext.newPage();
+    for (const page of [admin, writer]) {
+      page.on('pageerror', (error) => errors.push(error.message));
+      page.on('console', (message) => { if (message.type() === 'error' && /Content Security Policy|Refused to/.test(message.text())) errors.push(message.text()); });
+    }
+    await admin.goto(base);
+    await expect(admin.locator('#featuredPosts .feature-card')).toHaveCount(1);
+    await expect(admin.locator('#setupBanner')).toBeVisible();
+    await accessibility(admin, 'inicio');
+    await admin.screenshot({ path: path.join(artifacts, 'home-desktop.png'), fullPage: true });
+    await admin.locator('[data-action="setup"]').click();
+    await accessibility(admin, 'configuración');
+    await authenticate(admin, 'admin.browser@example.test', 'Administración ByteGuard');
+    await expect(admin.locator('#setupBanner')).toBeHidden();
+    await writer.goto(base);
+    await writer.locator('#accountButton').click();
+    await writer.locator('#authSwitch').click();
+    await authenticate(writer, 'writer.browser@example.test', 'Escritora ByteGuard');
+    await writer.locator('[data-action="new-post"]').first().click();
+    await writer.locator('#postTitle').fill('Cómo proteger tu cuenta paso a paso');
+    await writer.locator('#postExcerpt').fill('Una guía de ejemplo para aprender a proteger tus cuentas y reconocer las señales de riesgo.');
+    await writer.locator('#postContent').fill('## Empieza por lo importante\n\nProtege tu correo principal y revisa tus métodos de recuperación.\n\n## Construye buenos hábitos\n\n- Usa una contraseña única.\n- Activa la autenticación multifactor.\n\n**Revisa tus opciones de recuperación.**');
+    await writer.locator('[data-action="editor-preview"]').click();
+    await expect(writer.locator('#editorPreview h2')).toHaveCount(2);
+    await expect(writer.locator('#editorPreview strong')).toContainText('Revisa tus opciones');
+    await writer.locator('[data-action="editor-write"]').click();
+    await accessibility(writer, 'editor');
+    await writer.screenshot({ path: path.join(artifacts, 'editor-desktop.png') });
+    await writer.locator('#editorForm [value="draft"]').click();
+    await expect(writer.locator('#editorMessage')).toContainText('Borrador guardado');
+    await writer.locator('#editorDialog [data-close]').click();
+    await writer.reload();
+    await expect(writer.locator('#dashboardContent')).toContainText('Cómo proteger tu cuenta');
+    await writer.locator('[data-action="edit-post"]').click();
+    await expect(writer.locator('#postContent')).toHaveValue(/recuperación/);
+    await writer.locator('#editorForm [value="review"]').click();
+    await expect(writer.locator('#editorDialog')).toBeHidden();
+    await expect(writer.locator('#dashboardContent')).toContainText('En revisión');
+    await admin.reload();
+    await expect(admin.locator('[data-action="review-post"]')).toHaveCount(1);
+    await admin.locator('[data-action="review-post"]').click();
+    await expect(admin.locator('#reviewContent h2')).toHaveCount(2);
+    await admin.locator('#reviewNote').fill('Añade una referencia antes de publicar.');
+    await admin.locator('[data-action="return-post"]').click();
+    await expect(admin.locator('#reviewDialog')).toBeHidden();
+    await writer.reload();
+    await expect(writer.locator('#dashboardContent')).toContainText('Añade una referencia');
+    await writer.locator('[data-action="edit-post"]').click();
+    await expect(writer.locator('#editorReviewNote')).toContainText('referencia');
+    await writer.locator('#postContent').fill((await writer.locator('#postContent').inputValue()) + '\n\nConsulta la documentación oficial de tu proveedor de correo.');
+    await writer.locator('#editorForm [value="review"]').click();
+    await admin.reload();
+    await admin.locator('[data-action="review-post"]').click();
+    await admin.locator('[data-action="publish-post"]').click();
+    await admin.locator('[data-confirm="yes"]').click();
+    await expect(admin.locator('#reviewDialog')).toBeHidden();
+    await writer.goto(base + '/#articulos');
+    await writer.locator('#searchInput').fill('COMO PROTEGER');
+    await writer.locator('#searchForm button').click();
+    await expect(writer.locator('#publicPosts .article-card')).toHaveCount(1);
+    await writer.locator('#publicPosts h3 a').click();
+    await expect(writer.locator('#articleTitle')).toHaveText('Cómo proteger tu cuenta paso a paso');
+    const articleUrl = writer.url();
+    await writer.reload();
+    await expect(writer.locator('#articleContent h2')).toHaveCount(2);
+    await writer.locator('#bookmarkButton').click();
+    await expect(writer.locator('#bookmarkButton')).toHaveText('Guardado ✓');
+    await writer.locator('#commentContent').fill('Gracias por la guía. Me ayudó a revisar mi cuenta.');
+    await writer.locator('#commentForm button').click();
+    await expect(writer.locator('#commentMessage')).toContainText('después de la moderación');
+    await expect(writer.locator('#commentsList')).not.toContainText('Gracias por la guía');
+    await admin.locator('[data-action="dashboard-tab"][data-id="comments"]').click();
+    await expect(admin.locator('#dashboardContent')).toContainText('Gracias por la guía');
+    await admin.locator('[data-action="moderate-comment"][data-id$=":approved"]').click();
+    await writer.reload();
+    await expect(writer.locator('#commentsList')).toContainText('Gracias por la guía');
+    await accessibility(writer, 'artículo');
+    await writer.screenshot({ path: path.join(artifacts, 'article-desktop.png'), fullPage: true });
+    await writer.locator('#accountButton').click();
+    await writer.locator('[data-action="dashboard-tab"][data-id="saved"]').click();
+    await expect(writer.locator('#dashboardContent')).toContainText('Cómo proteger tu cuenta');
+    await writer.locator('[data-action="profile"]').click();
+    await writer.locator('#profileName').fill('Autora de ByteGuard');
+    await writer.locator('#profileBio').fill('Aprendo y comparto seguridad digital.');
+    await writer.locator('#profileForm button').click();
+    await expect(writer.locator('#profileMessage')).toContainText('actualizado');
+    await writer.locator('#profileDialog [data-close]').click();
+    await admin.locator('[data-action="dashboard-tab"][data-id="posts"]').click();
+    await expect(admin.locator('#dashboardContent .post-row')).toHaveCount(7);
+    await accessibility(admin, 'administración');
+    await admin.screenshot({ path: path.join(artifacts, 'admin-desktop.png'), fullPage: true });
+    await admin.locator('[data-action="dashboard-tab"][data-id="users"]').click();
+    await expect(admin.locator('#dashboardContent')).toContainText('Autora de ByteGuard');
+    await writer.goto(base);
+    await expect(writer.locator('#publicPosts .article-card')).toHaveCount(6);
+    await writer.locator('#catalogPagination [data-action="catalog-page"]').click();
+    await expect(writer.locator('#publicPosts .article-card')).toHaveCount(1);
+    await writer.locator('#searchInput').fill('sin-resultados-de-prueba');
+    await writer.locator('#searchForm button').click();
+    await expect(writer.locator('#publicPosts')).toContainText('No encontramos artículos');
+    await writer.locator('#clearFilters').click();
+    await expect(writer.locator('#publicPosts .article-card')).toHaveCount(6);
+    await writer.route('**/api/posts?limit=6*', (route) => route.abort(), { times: 1 });
+    await writer.locator('#searchForm button').click();
+    await expect(writer.locator('#publicPosts')).toContainText('No pudimos cargar el catálogo');
+    await writer.locator('[data-action="retry-catalog"]').click();
+    await expect(writer.locator('#publicPosts .article-card')).toHaveCount(6);
+    await writer.evaluate(() => window.scrollTo(0, 0));
+    for (const width of [360, 390, 768, 1024, 1440]) {
+      await writer.setViewportSize({ width, height: 900 });
+      assert.ok(await writer.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `Desbordamiento horizontal a ${width}px`);
+    }
+    await writer.setViewportSize({ width: 390, height: 844 });
+    await writer.screenshot({ path: path.join(artifacts, 'home-mobile.png'), fullPage: true });
+    await accessibility(writer, 'inicio móvil');
+    await writer.locator('#menuButton').click();
+    await expect(writer.locator('#mainNav')).toBeVisible();
+    await writer.locator('#mainNav a').first().click();
+    await expect(writer.locator('#mainNav')).toBeHidden();
+    await writer.goto(articleUrl);
+    await expect(writer.locator('#articleDetail')).toBeVisible();
+    assert.ok(await writer.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    await writer.locator('#accountButton').click();
+    await writer.locator('[data-action="new-post"]').first().click();
+    await writer.locator('#postTitle').fill('Un cambio sin guardar');
+    await writer.locator('#editorDialog [data-close]').click();
+    await expect(writer.locator('#confirmDialog')).toBeVisible();
+    await writer.locator('[data-confirm="no"]').click();
+    await expect(writer.locator('#editorDialog')).toBeVisible();
+    await writer.locator('#editorDialog [data-close]').click();
+    await writer.locator('[data-confirm="yes"]').click();
+    await writer.locator('[data-action="logout"]').click();
+    await expect(writer.locator('#accountButton')).toHaveText('Acceso editorial ↗');
+    assert.deepEqual(errors, []);
+    console.info('Navegador: configuración, escritor, borrador, vista previa, devolución, publicación, búsqueda, enlace directo, guardados, moderación, perfil, cierre de sesión y móvil superados. Sin errores JS/CSP. Seis revisiones de accesibilidad sin infracciones.');
+  } finally {
+    if (browser) await browser.close();
+    if (server) await new Promise((resolve) => server.close(resolve));
+    db.close();
+    fs.rmSync(directory, { recursive: true, force: true });
+  }
+}
+run().catch((error) => { console.error(error); process.exitCode = 1; });
